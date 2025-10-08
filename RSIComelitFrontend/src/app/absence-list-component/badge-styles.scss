@@ -1,0 +1,78 @@
+/* ===== STATUS BADGE STYLING ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  cursor: pointer;
+
+  /* JUSTIFIED status - Orange/Yellow */
+  &.badge-draft {
+    background: linear-gradient(135deg, #ff9800, #ffb74d) !important;
+    color: white !important;
+    border-color: #ff9800 !important;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3) !important;
+  }
+
+  /* VALID status - Green */
+  &.badge-accepte {
+    background: linear-gradient(135deg, #4caf50, #81c784) !important;
+    color: white !important;
+    border-color: #4caf50 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
+  }
+
+  /* NOT_JUSTIFIED status - Orange/Yellow */
+  &.badge-refuse {
+    background: linear-gradient(135deg, #ff9800, #ffb74d) !important;
+    color: white !important;
+    border-color: #ff9800 !important;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3) !important;
+  }
+
+  &:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  }
+}
+
+/* Force badge styling with maximum specificity */
+.absence-container .status-container .badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 8px 16px !important;
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+
+  &.badge-draft {
+    background: #ff9800 !important;
+    color: white !important;
+    border: 2px solid #ff9800 !important;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4) !important;
+  }
+
+  &.badge-accepte {
+    background: #4caf50 !important;
+    color: white !important;
+    border: 2px solid #4caf50 !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4) !important;
+  }
+
+  &.badge-refuse {
+    background: #ff9800 !important;
+    color: white !important;
+    border: 2px solid #ff9800 !important;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4) !important;
+  }
+}
