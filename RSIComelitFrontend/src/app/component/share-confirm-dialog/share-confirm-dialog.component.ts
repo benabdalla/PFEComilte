@@ -86,7 +86,7 @@ export class ShareConfirmDialogComponent implements OnInit, OnDestroy {
             duration: 5000
           });
           this.creatingShare = false;
-          this.router.navigateByUrl(`/posts/${newPostShare.id}`);
+          this.router.navigateByUrl(`user/posts/${newPostShare.id}`);
         },
         error: (errorResponse: HttpErrorResponse) => {
           this.matSnackbar.openFromComponent(SnackbarComponent, {

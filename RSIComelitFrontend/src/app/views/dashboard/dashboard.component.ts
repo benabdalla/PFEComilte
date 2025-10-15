@@ -1,189 +1,190 @@
-import { NgStyle } from '@angular/common';
-import { Component, DestroyRef, DOCUMENT, effect, inject, OnInit, Renderer2, signal, WritableSignal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ChartOptions } from 'chart.js';
+import { Component, inject, OnInit } from '@angular/core';
 import {
-  AvatarComponent,
-  ButtonDirective,
-  ButtonGroupComponent,
   CardBodyComponent,
   CardComponent,
-  CardFooterComponent,
   CardHeaderComponent,
+  CarouselComponent,
+  CarouselItemComponent,
+  CarouselIndicatorsComponent,
+  CarouselInnerComponent,
   ColComponent,
-  FormCheckLabelDirective,
-  GutterDirective,
-  ProgressComponent,
-  RowComponent,
-  TableDirective
+  RowComponent
 } from '@coreui/angular';
-import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { IconDirective } from '@coreui/icons-angular';
 
-import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
-import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
-import { ChatBotComponent } from '../../chat-bot/chat-bot.component';
-
-
-interface IUser {
-  name: string;
-  state: string;
-  registered: string;
-  country: string;
-  usage: number;
-  period: string;
-  payment: string;
-  activity: string;
-  avatar: string;
-  status: string;
-  color: string;
-}
+import { UserService } from '../../shared/service/user.service';
+import { PostService } from '../../shared/service/post.service';
 
 @Component({
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.scss'],
-  imports: [WidgetsDropdownComponent, CardComponent, CardBodyComponent, RowComponent, ColComponent, IconDirective, ReactiveFormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressComponent, TableDirective, AvatarComponent,]
+  imports: [
+    CardComponent,
+    CardBodyComponent,
+    CardHeaderComponent,
+    RowComponent,
+    ColComponent,
+    IconDirective,
+    CarouselComponent,
+    CarouselItemComponent,
+    CarouselIndicatorsComponent,
+    CarouselInnerComponent
+  ]
 })
 export class DashboardComponent implements OnInit {
 
-  readonly #destroyRef: DestroyRef = inject(DestroyRef);
-  readonly #document: Document = inject(DOCUMENT);
-  readonly #renderer: Renderer2 = inject(Renderer2);
-  readonly #chartsData: DashboardChartsData = inject(DashboardChartsData);
 
-  public users: IUser[] = [
+  // Inject services
+  private userService = inject(UserService);
+  private postService = inject(PostService);
+
+  // Employee Statistics
+  public employeeStats = {
+    totalUsers: 0,
+    totalPosts: 0,
+    loading: true,
+    error: null as string | null
+  };
+
+  // Gallery Images using available assets
+  public galleryImages = [
     {
-      name: 'Yiorgos Avraamu',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Us',
-      usage: 50,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Mastercard',
-      activity: '10 sec ago',
-      avatar: './assets/images/avatars/1.jpg',
-      status: 'success',
-      color: 'success'
+      src: './assets/images/organigrame.jpeg',
+      title: 'Company Organization',
+      description: 'Our complete organizational structure and team hierarchy'
     },
     {
-      name: 'Avram Tarasios',
-      state: 'Recurring ',
-      registered: 'Jan 1, 2021',
-      country: 'Br',
-      usage: 10,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Visa',
-      activity: '5 minutes ago',
-      avatar: './assets/images/avatars/2.jpg',
-      status: 'danger',
-      color: 'info'
+      src: 'https://comelitgroup.fr/wp-content/themes/wsk-theme/media/images/user_types/gestionnaire.png',
+      title: 'Management Portal',
+      description: 'Administrative interface for system managers and supervisors'
     },
     {
-      name: 'Quintin Ed',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'In',
-      usage: 74,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Stripe',
-      activity: '1 hour ago',
-      avatar: './assets/images/avatars/3.jpg',
-      status: 'warning',
-      color: 'warning'
+      src: 'https://comelitgroup.fr/wp-content/uploads/2023/03/mondo-sicuro-utilisateur-homepage.webp',
+      title: 'Secure World Solutions',
+      description: 'Comprehensive security solutions for users and administrators'
     },
     {
-      name: 'Enéas Kwadwo',
-      state: 'Sleep',
-      registered: 'Jan 1, 2021',
-      country: 'Fr',
-      usage: 98,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Paypal',
-      activity: 'Last month',
-      avatar: './assets/images/avatars/4.jpg',
-      status: 'secondary',
-      color: 'danger'
-    },
-    {
-      name: 'Agapetus Tadeáš',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Es',
-      usage: 22,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'ApplePay',
-      activity: 'Last week',
-      avatar: './assets/images/avatars/5.jpg',
-      status: 'success',
-      color: 'primary'
-    },
-    {
-      name: 'Friderik Dávid',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Pl',
-      usage: 43,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Amex',
-      activity: 'Yesterday',
-      avatar: './assets/images/avatars/6.jpg',
-      status: 'info',
-      color: 'dark'
+      src: 'https://comelitgroup.fr/wp-content/uploads/2023/01/Professionista_soluzioni_appartamento_antintrusione-securhub.webp',
+      title: 'Professional Security Hub',
+      description: 'Advanced apartment and building security solutions for professionals'
     }
   ];
 
-  public mainChart: IChartProps = { type: 'line' };
-  public mainChartRef: WritableSignal<any> = signal(undefined);
-  #mainChartRefEffect = effect(() => {
-    if (this.mainChartRef()) {
-      this.setChartStyles();
+  // Carousel Data based on the provided HTML
+  public carouselSlides = [
+    {
+      image: 'https://comelitgroup.fr/wp-content/uploads/2024/11/Sostenibilita-door.jpg',
+      overline: 'Sustainable Development',
+      title: 'Tomorrow\'s Security',
+      description: 'For Comelit, sustainable development is essential: it\'s about contributing to a safer future by reducing our environmental impact, taking care of everyone who works with us, and making our production processes efficient, with the support of sustainable technologies.',
+      ctaText: 'Learn More',
+      ctaLink: 'https://comelitgroup.fr/developpement-durable/'
+    },
+    {
+      image: 'https://comelitgroup.fr/wp-content/uploads/2024/11/Cybersecurity-door.jpg',
+      overline: 'Cyber Security',
+      title: 'Your data is truly secure',
+      description: 'Data security is a priority for us, and we are committed to protecting it. Because being able to guarantee that every data processed, every video recorded, every face captured is truly safe is an ethical commitment for us.',
+      ctaText: 'Learn More',
+      ctaLink: 'https://comelitgroup.fr/cybersecurite/'
+    },
+    {
+      image: 'https://comelitgroup.fr/wp-content/uploads/2024/11/Inclusione-door.jpg',
+      overline: 'Inclusivity',
+      title: 'Us for you, you with us',
+      description: 'At Comelit, we place people at the center of our concerns, valuing potential and differences to foster creativity and innovation. We guarantee people who work with us a safe and inclusive environment, a good work-life balance and many benefits.',
+      ctaText: 'Learn More',
+      ctaLink: 'https://comelitgroup.fr/travailler-avec-nous/'
     }
-  });
-  public chart: Array<IChartProps> = [];
-  public trafficRadioGroup = new FormGroup({
-    trafficRadio: new FormControl('Month')
-  });
+  ];
+
+
+
 
   ngOnInit(): void {
-    this.initCharts();
-    this.updateChartOnColorModeChange();
+    this.loadDashboardData();
   }
 
-  initCharts(): void {
-    this.mainChartRef()?.stop();
-    this.mainChart = this.#chartsData.mainChart;
+  public refreshDashboard(): void {
+    this.employeeStats.loading = true;
+    this.employeeStats.error = null;
+    this.loadDashboardData();
   }
 
-  setTrafficPeriod(value: string): void {
-    this.trafficRadioGroup.setValue({ trafficRadio: value });
-    this.#chartsData.initMainChart(value);
-    this.initCharts();
-  }
+  loadDashboardData(): void {
+    let loadedCount = 0;
+    const totalApiCalls = 2;
+    this.employeeStats.error = null;
 
-  handleChartRef($chartRef: any) {
-    if ($chartRef) {
-      this.mainChartRef.set($chartRef);
-    }
-  }
-
-  updateChartOnColorModeChange() {
-    const unListen = this.#renderer.listen(this.#document.documentElement, 'ColorSchemeChange', () => {
-      this.setChartStyles();
+    // Load total users count
+    this.userService.getUsers({ page: 1, limit: 1 }).subscribe({
+      next: (response) => {
+        this.employeeStats.totalUsers = response.total || 0;
+        loadedCount++;
+        if (loadedCount === totalApiCalls) {
+          this.employeeStats.loading = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading users count:', error);
+        this.employeeStats.totalUsers = 0;
+        this.employeeStats.error = 'Failed to load some statistics';
+        loadedCount++;
+        if (loadedCount === totalApiCalls) {
+          this.employeeStats.loading = false;
+        }
+      }
     });
 
-    this.#destroyRef.onDestroy(() => {
-      unListen();
+    // Try to load posts count with fallback approach
+    this.loadPostsCount(() => {
+      loadedCount++;
+      if (loadedCount === totalApiCalls) {
+        this.employeeStats.loading = false;
+      }
     });
   }
 
-  setChartStyles() {
-    if (this.mainChartRef()) {
-      setTimeout(() => {
-        const options: ChartOptions = { ...this.mainChart.options };
-        const scales = this.#chartsData.getScales();
-        this.mainChartRef().options.scales = { ...options.scales, ...scales };
-        this.mainChartRef().update();
-      });
-    }
+  private loadPostsCount(callback: () => void): void {
+    // First try with a smaller page size to avoid server overload
+    this.postService.getAllPosts(0, 10).subscribe({
+      next: (response) => {
+        if (Array.isArray(response)) {
+          // For now, we'll show the count of recent posts
+          // You may want to implement a dedicated endpoint for total count
+          this.employeeStats.totalPosts = response.length;
+        } else {
+          this.employeeStats.totalPosts = 0;
+        }
+        callback();
+      },
+      error: (error) => {
+        console.warn('getAllPosts failed, trying getAllMyPosts:', error);
+        // Fallback to user's own posts
+        this.postService.getAllMyPosts(0, 10).subscribe({
+          next: (response) => {
+            if (Array.isArray(response)) {
+              this.employeeStats.totalPosts = response.length;
+            } else {
+              this.employeeStats.totalPosts = 0;
+            }
+            callback();
+          },
+          error: (error) => {
+            console.error('Both post APIs failed:', error);
+            // Set to 0 if both APIs fail
+            this.employeeStats.totalPosts = 0;
+            callback();
+          }
+        });
+      }
+    });
   }
+
+
+
+
+
+
+
 }

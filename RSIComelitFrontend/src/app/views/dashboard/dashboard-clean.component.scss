@@ -1,0 +1,194 @@
+// Dashboard Component Styling
+.dashboard-container {
+  padding: 1rem;
+}
+
+// Statistics Cards
+.stat-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+// Gallery Styling
+.gallery-card {
+  height: 280px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s ease;
+  background: #fff;
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+
+    .image-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .gallery-img {
+      transform: scale(1.1);
+    }
+
+    .overlay-title,
+    .overlay-description {
+      transform: translateY(0);
+    }
+  }
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: all 0.4s ease;
+  display: block;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(102, 126, 234, 0.9) 0%,
+    rgba(118, 75, 162, 0.9) 100%
+  );
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+  padding: 1.5rem;
+}
+
+.overlay-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(20px);
+  transition: transform 0.4s ease 0.1s;
+}
+
+.overlay-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.95;
+  margin: 0;
+  transform: translateY(20px);
+  transition: transform 0.4s ease 0.2s;
+}
+
+// Card Enhancements
+c-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+}
+
+c-card-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 15px 15px 0 0 !important;
+
+  .card-title {
+    color: #495057;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: #6c757d;
+    }
+  }
+}
+
+// Loading Spinner Enhancement
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .gallery-card {
+    height: 220px;
+    margin-bottom: 1rem;
+  }
+
+  .overlay-title {
+    font-size: 1.2rem;
+  }
+
+  .overlay-description {
+    font-size: 0.85rem;
+  }
+
+  .image-overlay {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 1.8rem;
+  }
+
+  .gallery-card {
+    height: 200px;
+  }
+}

@@ -25,7 +25,7 @@
     <c-header-nav (click)="onNotificationsClick()" class="d-none d-md-flex ms-auto">
       <div class="position-relative">
         <c-dropdown [popperOptions]="{ placement: 'bottom-end' }" variant="nav-item">
-          <button (click)="handleUnseenNotifications()" [caret]="false" aria-label="Ouvrir les notifications"
+          <button (click)="handleUnseenNotifications()" [caret]="false" aria-label="Open notifications"
                   cDropdownToggle class="d-flex flex-column align-items-center">
             <svg cIcon class="my-1" name="cilBell" size="lg"></svg>
             <ng-container *ngIf="notifications$ | async as notifis">
@@ -45,7 +45,7 @@
               </li>
             </ng-container>
             <ng-template #noNotif>
-              <li class="dropdown-item text-center text-muted">Aucune notification</li>
+              <li class="dropdown-item text-center text-muted">No notifications</li>
             </ng-template>
           </ul>
         </c-dropdown>

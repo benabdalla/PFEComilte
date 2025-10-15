@@ -5,6 +5,13 @@ import {PostDetailComponent} from '../component/post-detail/post-detail.componen
 
 export const routes: Routes = [
   {
+    path: 'dashboard', // ✅ use lowercase + no spaces
+    loadComponent: () =>
+      import('../views/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    canActivate: [RoleGuard],
+    data: {allowedRoles: ['admin'], title: 'Dashboard'},
+  },
+    {
     path: 'add-user', // ✅ use lowercase + no spaces
     loadComponent: () =>
       import('./add-user/add-user.component').then((m) => m.AddUserComponent),

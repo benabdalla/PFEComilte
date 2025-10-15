@@ -122,7 +122,7 @@ export class ChatNotificationRealtimeService {
             this.notificationCountSubject.next(this.notificationCountSubject.getValue() + 1);
           }
         } catch (error) {
-          console.error('Erreur lors du parsing du message de notification:', error);
+          console.error('Error parsing notification message:', error);
         }
       }
     );

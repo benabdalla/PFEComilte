@@ -3,6 +3,12 @@ import {INavData} from '@coreui/angular';
 const commonNavItems: INavData[] = [
 
   {
+    name: 'Dashboard',
+    url: '/user/dashboard',
+    iconComponent: {name: 'cil-speedometer'},
+  },
+
+  {
     name: 'Posts',
     url: '/user/list-post',
     iconComponent: {name: 'cil-list'},
@@ -35,7 +41,7 @@ const commonNavItems: INavData[] = [
     },
   },
   {
-    name: 'Conges',
+    name: 'leave',
     url: '/user/conges',
     iconComponent: {name: 'cil-calendar'},
     badge: {

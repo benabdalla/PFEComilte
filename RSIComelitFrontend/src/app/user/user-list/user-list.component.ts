@@ -16,6 +16,7 @@ import {FormsModule} from '@angular/forms';
 import {PaginationParams, UserProfil} from '../../shared/model/user-profil.model';
 import {UserService} from '../../shared/service/user.service';
 import {EditUserDialogComponent} from '../edit-user-dialog/edit-user-dialog.component';
+import {ConfirmationDialogComponent} from '../../component/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-user-list',
@@ -141,23 +142,36 @@ loadUsers(): void {
   }
 
   deleteUser(user: UserProfil): void {
-    if (confirm(`Are you sure you want to delete ${user.firstName} ${user.lastName}?`)) {
-      this.userService.deleteUser(user.id!).subscribe({
-        next: () => {
-          this.loadUsers();
-          this.snackBar.open('User deleted successfully!', 'Close', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-        },
-        error: (error) => {
-          console.error('Error deleting user:', error);
-          this.snackBar.open('Error deleting user', 'Close', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
-        }
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '450px',
+      data: {
+        title: 'Delete User',
+        message: `Are you sure you want to delete ${user.firstName} ${user.lastName}? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        type: 'danger'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.deleteUser(user.id!).subscribe({
+          next: () => {
+            this.loadUsers();
+            this.snackBar.open('User deleted successfully!', 'Close', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: (error) => {
+            console.error('Error deleting user:', error);
+            this.snackBar.open('Error deleting user', 'Close', {
+              duration: 3000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+      }
+    });
   }
 }

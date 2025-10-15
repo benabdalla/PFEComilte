@@ -1,78 +1,132 @@
-<app-widgets-dropdown />
-<c-row>
-  <c-col xs>
-    <c-card class="mb-4">
+
+<!-- Employee Statistics Overview -->
+<c-row class="mb-4">
+  <c-col xs="12">
+    <c-card>
+      <c-card-header>
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="card-title mb-0">
+            <svg cIcon name="cilChartPie" class="me-2"></svg>
+            Platform Statistics
+          </h4>
+          <button class="btn btn-outline-primary btn-sm"
+                  (click)="refreshDashboard()"
+                  [disabled]="employeeStats.loading">
+            <svg cIcon name="cilReload" class="me-1"></svg>
+            Refresh
+          </button>
+        </div>
+      </c-card-header>
       <c-card-body>
-        <table
-          [hover]="true"
-          [responsive]="true"
-          [striped]="true"
-          align="middle"
-          cTable
-          class="mb-0 border"
-        >
-          <thead class="text-nowrap text-truncate">
-          <tr>
-            <th class="bg-body-tertiary text-center ">
-              <svg cIcon name="cilPeople"></svg>
-            </th>
-            <th class="bg-body-tertiary">User</th>
-            <th class="bg-body-tertiary text-center">Country</th>
-            <th class="bg-body-tertiary">Usage</th>
-            <th class="bg-body-tertiary text-center">Payment Method</th>
-            <th class="bg-body-tertiary">Activity</th>
-          </tr>
-          </thead>
-          <tbody>
-            @for (user of users; track user.name; let i = $index) {
-              <tr>
-                <td class="text-center">
-                  <c-avatar size="md" src="{{ user.avatar }}" status="{{ user.status }}" />
-                </td>
-                <td>
-                  <div>{{ user.name }}</div>
-                  <div class="small text-body-secondary text-nowrap">
-                  <span>
-                    {{ user.state }} | Registered: {{ user.registered }}
-                  </span>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <svg
-                    cIcon
-                    id="{{ user.country + user.name }}"
-                    name="cif{{ user.country }}"
-                    size="xl"
-                    title="{{ user.country }}"
-                  ></svg>
-                </td>
-                <td>
-                  <div class="d-flex justify-content-between">
-                    <div class="float-start">
-                      <strong>{{ user.usage }}%</strong>
-                    </div>
-                    <div class="float-end ms-1 text-nowrap">
-                      <small class="text-body-secondary">
-                        {{ user.period }}
-                      </small>
-                    </div>
-                  </div>
-                  <c-progress thin [value]="user.usage" color="{{ user.color }}" aria-label="Usage" />
-                </td>
-                <td class="text-center">
-                  <svg cIcon name="cibCc{{ user.payment }}" size="xl"></svg>
-                </td>
-                <td>
-                  <div class="small text-body-secondary">Last login</div>
-                  <div class="fw-semibold text-nowrap">{{ user.activity }}</div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+        @if (employeeStats.loading) {
+          <div class="text-center p-4">
+            <output class="spinner-border text-primary">
+              <span class="visually-hidden">Loading...</span>
+            </output>
+            <p class="mt-2">Loading platform statistics...</p>
+          </div>
+        } @else {
+          @if (employeeStats.error) {
+            <div class="alert alert-warning d-flex align-items-center">
+              <svg cIcon name="cilWarning" class="me-2"></svg>
+              {{ employeeStats.error }}
+            </div>
+          }
+          <c-row class="text-center">
+            <c-col sm="6">
+              <div class="stat-card">
+                <div class="stat-number text-primary">{{ employeeStats.totalUsers }}</div>
+                <div class="stat-label">Total Users</div>
+              </div>
+            </c-col>
+            <c-col sm="6">
+              <div class="stat-card">
+                <div class="stat-number text-success">{{ employeeStats.totalPosts }}</div>
+                <div class="stat-label">Total Posts</div>
+              </div>
+            </c-col>
+          </c-row>
+        }
       </c-card-body>
     </c-card>
   </c-col>
 </c-row>
-<app-chat-bot></app-chat-bot>
+
+<!-- Comelit Carousel Section -->
+<c-row class="mb-4">
+  <c-col xs="12">
+    <c-card class="overflow-hidden">
+      <c-card-header>
+        <h4 class="card-title mb-0">
+          <svg cIcon name="cilSliders" class="me-2"></svg>
+          Company Values
+        </h4>
+      </c-card-header>
+      <c-card-body class="p-0">
+        <c-carousel [interval]="5000" [wrap]="true" class="carousel-fade">
+          <c-carousel-indicators></c-carousel-indicators>
+          <c-carousel-inner>
+            @for (slide of carouselSlides; track slide.image; let i = $index) {
+              <c-carousel-item [active]="i === 0">
+                <div class="carousel-slide" [style.background-image]="'url(' + slide.image + ')'">
+                  <div class="carousel-content">
+                    <div class="container">
+                      <div class="row align-items-center justify-content-start">
+                        <div class="col-lg-8">
+                          <div class="carousel-text">
+                            <p class="overline text-primary">{{ slide.overline }}</p>
+                            <h3 class="slide-title text-light">{{ slide.title }}</h3>
+                            <p class="slide-description text-light">{{ slide.description }}</p>
+                            <a [href]="slide.ctaLink" target="_blank" rel="noopener"
+                               class="btn btn-outline-light cta-button">
+                              {{ slide.ctaText }}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </c-carousel-item>
+            }
+          </c-carousel-inner>
+        </c-carousel>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+
+<!-- Gallery Section -->
+<c-row class="mb-4">
+  <c-col xs="12">
+    <c-card>
+      <c-card-header>
+        <h4 class="card-title mb-0">
+          <svg cIcon name="cilCamera" class="me-2"></svg>
+          Company Gallery
+        </h4>
+      </c-card-header>
+      <c-card-body>
+        <c-row>
+          @for (image of galleryImages; track image.src; let i = $index) {
+            <c-col lg="6" md="6" sm="12" class="mb-3">
+              <div class="gallery-card">
+                <div class="image-container">
+                  <img [src]="image.src" [alt]="image.title" class="gallery-img">
+                  <div class="image-overlay">
+                    <h5 class="overlay-title">{{ image.title }}</h5>
+                    <p class="overlay-description">{{ image.description }}</p>
+                  </div>
+                </div>
+              </div>
+            </c-col>
+          }
+        </c-row>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+
 
