@@ -242,6 +242,9 @@ public class PostController {
                                          @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page - 1;
         size = size <= 0 ? 5 : size;
+        if(page==-1){
+            page=0;
+        }
         List<PostResponse> taggedPosts = postService.getPostsPaginate(page, size);
         return new ResponseEntity<>(taggedPosts, HttpStatus.OK);
     }
